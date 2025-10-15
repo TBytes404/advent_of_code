@@ -15,7 +15,7 @@ defmodule D2 do
 
   def place_order(boxes, commodity) do
     String.split(boxes, "\n")
-    |> Enum.map(fn dim -> dim |> D2.parse_dimentions() |> commodity.() end)
+    |> Enum.map(&(D2.parse_dimentions(&1) |> commodity.()))
     |> Enum.sum()
   end
 end
