@@ -1,4 +1,4 @@
-defmodule D3 do
+defmodule Aoc.Y2015.D3 do
   def map_houses(map, position, directions) do
     if directions == "" do
       map
@@ -26,10 +26,11 @@ defmodule D3 do
   def double_map_house(input) do
     santa = String.to_charlist(input) |> Enum.take_every(2) |> to_string()
     robot = String.to_charlist(input) |> Enum.drop_every(2) |> to_string()
-    D3.map_houses(MapSet.new([{0, 0}]), {0, 0}, santa) |> D3.map_houses({0, 0}, robot)
+    map_houses(MapSet.new([{0, 0}]), {0, 0}, santa) |> map_houses({0, 0}, robot)
+  end
+
+  def aoc(input) do
+    IO.puts("Santa visited houses: #{map_houses(input) |> Enum.count()}")
+    IO.puts("Santa & Robo visited houses: #{double_map_house(input) |> Enum.count()}")
   end
 end
-
-input = IO.read(:eof) |> String.trim()
-IO.puts("Santa visited houses: #{D3.map_houses(input) |> Enum.count()}")
-IO.puts("Santa & Robo visited houses: #{D3.double_map_house(input) |> Enum.count()}")

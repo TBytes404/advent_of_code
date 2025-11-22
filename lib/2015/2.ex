@@ -1,4 +1,4 @@
-defmodule D2 do
+defmodule Aoc.Y2015.D2 do
   def parse_dimentions(dimentions) do
     String.split(dimentions, "x") |> Enum.map(&String.to_integer/1)
   end
@@ -15,11 +15,12 @@ defmodule D2 do
 
   def place_order(boxes, commodity) do
     String.split(boxes, "\n")
-    |> Enum.map(&(D2.parse_dimentions(&1) |> commodity.()))
+    |> Enum.map(&(parse_dimentions(&1) |> commodity.()))
     |> Enum.sum()
   end
-end
 
-input = IO.read(:eof) |> String.trim()
-IO.puts("Required wrapping paper area: #{D2.place_order(input, &D2.calculate_wrapper/1)}")
-IO.puts("Required ribbon length: #{D2.place_order(input, &D2.calculate_ribbon/1)}")
+  def aoc(input) do
+    IO.puts("Required wrapping paper area: #{place_order(input, &calculate_wrapper/1)}")
+    IO.puts("Required ribbon length: #{place_order(input, &calculate_ribbon/1)}")
+  end
+end

@@ -1,4 +1,4 @@
-defmodule D5 do
+defmodule Aoc.Y2015.D5 do
   @contains_vowels ~r/(?=(.*[aeiou]){3}).*/
   @has_adjacent_twin ~r/.*(.)\1.*/
   @contains_no_bad_chars ~r/^(?!.*(ab|cd|pq|xy)).*$/
@@ -21,8 +21,10 @@ defmodule D5 do
           &1 =~ @has_non_adjacent_twin)
     )
   end
-end
 
-input = IO.read(:eof) |> String.split()
-IO.puts("Nice strings in part 1: #{D5.count_nice(input)}")
-IO.puts("Nice strings in part 2: #{D5.count_nice_part2(input)}")
+  def aoc(input) do
+    strings = String.split(input)
+    IO.puts("Nice strings in part 1: #{count_nice(strings)}")
+    IO.puts("Nice strings in part 2: #{count_nice_part2(strings)}")
+  end
+end

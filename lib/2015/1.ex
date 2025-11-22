@@ -1,4 +1,4 @@
-defmodule D1 do
+defmodule Aoc.Y2015.D1 do
   def count_floors(floor, instructions) do
     case instructions do
       "(" <> rest -> count_floors(floor + 1, rest)
@@ -18,8 +18,9 @@ defmodule D1 do
       end
     end
   end
-end
 
-input = IO.read(:eof) |> String.trim()
-IO.puts("Destination floor: #{D1.count_floors(0, input)}")
-IO.puts("First instruction that leads to basement: #{D1.find_basement(0, 0, input)}")
+  def aoc(input) do
+    IO.puts("Destination floor: #{count_floors(0, input)}")
+    IO.puts("First instruction that leads to basement: #{find_basement(0, 0, input)}")
+  end
+end
