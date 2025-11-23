@@ -26,7 +26,7 @@ defmodule Aoc.Y2015.D3 do
   def double_map_house(input) do
     santa = String.to_charlist(input) |> Enum.take_every(2) |> to_string()
     robot = String.to_charlist(input) |> Enum.drop_every(2) |> to_string()
-    map_houses(MapSet.new([{0, 0}]), {0, 0}, santa) |> map_houses({0, 0}, robot)
+    map_houses(santa) |> map_houses({0, 0}, robot)
   end
 
   def aoc(input) do

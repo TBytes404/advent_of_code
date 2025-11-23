@@ -3,6 +3,6 @@ defmodule AocTest do
   doctest Aoc
 
   test "runs the world" do
-    Enum.each(1..5, &Aoc.run!(2015, &1))
+    Enum.each(1..6, &Aoc.run!(2015, &1))
   end
 end
