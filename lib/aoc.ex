@@ -1,8 +1,10 @@
 defmodule Aoc do
   def run!(y, d) do
-    input = input!(y, d) |> String.trim()
     module = Module.concat(Aoc, :"Y#{y}.D#{d}")
-    apply(module, :aoc, [input])
+    input = apply(module, :parse, [input!(y, d)])
+
+    Enum.map(1..2, &Task.async(module, :"part#{&1}", [input]))
+    |> Task.await_many(50_000)
   end
 
   @doc """
@@ -15,7 +17,7 @@ defmodule Aoc do
 
     case File.read(filepath) do
       {:ok, content} ->
-        content
+        content |> String.trim()
 
       {:error, reason} ->
         IO.puts("File not found or unreadable: #{reason}. Attempting to fetch...")

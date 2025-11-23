@@ -29,8 +29,7 @@ defmodule Aoc.Y2015.D3 do
     map_houses(santa) |> map_houses({0, 0}, robot)
   end
 
-  def aoc(input) do
-    IO.puts("Santa visited houses: #{map_houses(input) |> Enum.count()}")
-    IO.puts("Santa & Robo visited houses: #{double_map_house(input) |> Enum.count()}")
-  end
+  def parse(input), do: input
+  def part1(input), do: map_houses(input) |> Enum.count()
+  def part2(input), do: double_map_house(input) |> Enum.count()
 end

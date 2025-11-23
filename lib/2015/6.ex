@@ -1,11 +1,5 @@
 defmodule Aoc.Y2015.D6 do
-  def aoc(input) do
-    instructions = String.split(input, "\n")
-    IO.puts("lights are lit: #{part1(instructions, %{})}")
-    IO.puts("total brightness is: #{part2(instructions, %{})}")
-  end
-
-  def part1(instructions, matrix),
+  def toggle(instructions, matrix),
     do:
       Enum.reduce(instructions, matrix, &act1/2)
       |> Map.filter(fn {_, v} -> v end)
@@ -19,7 +13,7 @@ defmodule Aoc.Y2015.D6 do
     end
   end
 
-  def part2(instructions, matrix),
+  def brighten(instructions, matrix),
     do:
       Enum.reduce(instructions, matrix, &act2/2)
       |> Map.values()
@@ -33,7 +27,7 @@ defmodule Aoc.Y2015.D6 do
     end
   end
 
-  def parse(coords) do
+  def keys(coords) do
     [srow, scol, erow, ecol] =
       String.split(coords, " through ")
       |> Enum.flat_map(&String.split(&1, ","))
@@ -42,8 +36,12 @@ defmodule Aoc.Y2015.D6 do
     for row <- srow..erow, col <- scol..ecol, do: {row, col}
   end
 
-  def merge(matrix, coords, default), do: Map.merge(matrix, Map.from_keys(parse(coords), default))
+  def merge(matrix, coords, default), do: Map.merge(matrix, Map.from_keys(keys(coords), default))
 
   def merge(matrix, coords, default, fun),
-    do: Map.merge(matrix, Map.from_keys(parse(coords), default), fn _, v, _ -> fun.(v) end)
+    do: Map.merge(matrix, Map.from_keys(keys(coords), default), fn _, v, _ -> fun.(v) end)
+
+  def parse(input), do: String.split(input, "\n")
+  def part1(input), do: toggle(input, %{})
+  def part2(input), do: brighten(input, %{})
 end

@@ -22,9 +22,7 @@ defmodule Aoc.Y2015.D5 do
     )
   end
 
-  def aoc(input) do
-    strings = String.split(input)
-    IO.puts("Nice strings in part 1: #{count_nice(strings)}")
-    IO.puts("Nice strings in part 2: #{count_nice_part2(strings)}")
-  end
+  def parse(input), do: String.split(input)
+  def part1(input), do: count_nice(input)
+  def part2(input), do: count_nice_part2(input)
 end

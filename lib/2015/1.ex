@@ -19,8 +19,7 @@ defmodule Aoc.Y2015.D1 do
     end
   end
 
-  def aoc(input) do
-    IO.puts("Destination floor: #{count_floors(0, input)}")
-    IO.puts("First instruction that leads to basement: #{find_basement(0, 0, input)}")
-  end
+  def parse(input), do: input
+  def part1(input), do: count_floors(0, input)
+  def part2(input), do: find_basement(0, 0, input)
 end

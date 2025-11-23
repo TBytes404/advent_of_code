@@ -19,8 +19,7 @@ defmodule Aoc.Y2015.D2 do
     |> Enum.sum()
   end
 
-  def aoc(input) do
-    IO.puts("Required wrapping paper area: #{place_order(input, &calculate_wrapper/1)}")
-    IO.puts("Required ribbon length: #{place_order(input, &calculate_ribbon/1)}")
-  end
+  def parse(input), do: input
+  def part1(input), do: place_order(input, &calculate_wrapper/1)
+  def part2(input), do: place_order(input, &calculate_ribbon/1)
 end

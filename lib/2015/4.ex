@@ -10,8 +10,7 @@ defmodule Aoc.Y2015.D4 do
     end
   end
 
-  def aoc(input) do
-    IO.puts("000_00 answer is: #{find_answer(1, input, "00000")}")
-    IO.puts("000_000 Zeros answer is: #{find_answer(1, input, "000000")}")
-  end
+  def parse(input), do: input
+  def part1(input), do: find_answer(1, input, "00000")
+  def part2(input), do: find_answer(1, input, "000000")
 end
