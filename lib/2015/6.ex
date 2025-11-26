@@ -2,8 +2,7 @@ defmodule Aoc.Y2015.D6 do
   def toggle(instructions, matrix),
     do:
       Enum.reduce(instructions, matrix, &act1/2)
-      |> Map.filter(fn {_, v} -> v end)
-      |> Enum.count()
+      |> Enum.count(fn {_, v} -> v end)
 
   def act1(inst, matrix) do
     case inst do
