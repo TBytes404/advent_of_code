@@ -12,7 +12,6 @@ defmodule Aoc do
   Fetches the input from Advent of Code if the file doesn't exist.
   """
   def input!(y, d) do
-    File.mkdir_p("input/#{y}")
     filepath = "input/#{y}/#{d}.txt"
 
     case File.read(filepath) do
@@ -20,11 +19,8 @@ defmodule Aoc do
         content |> String.trim()
 
       {:error, reason} ->
-        IO.puts("File not found or unreadable: #{reason}. Attempting to fetch...")
-
-        fetch!(y, d, File.stream!(filepath))
-        IO.puts("Successfully saved to #{filepath}.")
-
+        IO.puts("File not found or unreadable: #{reason}.")
+        fetch!(y, d, filepath)
         input!(y, d)
     end
   end
@@ -32,17 +28,35 @@ defmodule Aoc do
   @doc """
   Fetches the input from the Advent of Code website using the session cookie.
   """
-  def fetch!(y, d, file) do
+  def fetch!(y, d, filepath) do
+    File.mkdir_p("input/#{y}")
     cookie = session_cookie!()
-    url = "https://adventofcode.com/#{y}/day/#{d}/input"
+    IO.puts("Attempting to fetch challenge #{y}/#{d}...")
 
-    IO.puts("Fetching from #{url}...")
+    if Req.get!(
+         url: "https://adventofcode.com/#{y}/day/#{d}/input",
+         headers: %{"Cookie" => "session=#{cookie};"},
+         into: File.stream!(filepath)
+       ).status != 200 do
+      raise "Challenge not found for #{y}/#{d}"
+    end
 
-    Req.get!(
-      url: url,
-      headers: %{"Cookie" => "session=#{cookie};"},
-      into: file
-    )
+    IO.puts("Successfully saved to #{filepath}.")
+  end
+
+  def setup!(y, d) do
+    File.mkdir_p("lib/#{y}")
+    filepath = "lib/#{y}/#{d}.ex"
+
+    File.write!(filepath, """
+    defmodule Aoc.Y#{y}.D#{d} do
+      def parse(input), do: input
+      def part1(input), do: input
+      def part2(input), do: input
+    end
+    """)
+
+    IO.puts("Successfully setup #{filepath}.")
   end
 
   # Private function to securely retrieve the session cookie
