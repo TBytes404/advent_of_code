@@ -1,4 +1,23 @@
 defmodule Aoc do
+  @doc """
+  Dont use in loops or cocurrencty
+  """
+  def lock!(y, d) do
+    [r1, r2] = rs = run!(y, d)
+
+    case ask_yes_no("Locking these results
+  Part 1: #{r1}
+  Part 2: #{r2}
+      ") do
+      :no ->
+        IO.puts("Do not lock")
+
+      :yes ->
+        IO.puts("Commanding lock")
+        output!(y, d, rs)
+    end
+  end
+
   def run!(y, d) do
     module = Module.concat(Aoc, :"Y#{y}.D#{d}")
     input = apply(module, :parse, [input!(y, d)])
@@ -59,6 +78,13 @@ defmodule Aoc do
     IO.puts("Successfully setup #{filepath}.")
   end
 
+  def output!(y, d, rs) do
+    File.mkdir_p("result/#{y}")
+    filepath = "result/#{y}/#{d}.txt"
+    content = Enum.join(rs, "\n")
+    File.write!(filepath, content)
+  end
+
   # Private function to securely retrieve the session cookie
   defp session_cookie!() do
     case System.get_env("AOC_SESSION_COOKIE") do
@@ -68,5 +94,38 @@ defmodule Aoc do
       cookie ->
         cookie
     end
+  end
+
+  def ask_yes_no(prompt) do
+    case IO.gets(prompt <> " (y/[n]): ")
+         |> String.trim()
+         |> String.downcase() do
+      "y" -> :yes
+      _ -> :no
+    end
+  end
+
+  def get_events(y) do
+    File.ls!("lib/#{y}")
+    |> Enum.map(&(Path.basename(&1, ".ex") |> Integer.parse()))
+    |> Enum.filter(fn
+      {i, ""} -> i in 1..25
+      _ -> false
+    end)
+    |> Enum.map(&elem(&1, 0))
+  end
+
+  def read_results(y) do
+    File.ls!("result/#{y}")
+    |> Enum.map(&(Path.basename(&1, ".txt") |> Integer.parse()))
+    |> Enum.filter(fn
+      {i, ""} -> i in 1..25
+      _ -> false
+    end)
+    |> Enum.map(fn {d, _} ->
+      {d,
+       File.read!("result/#{y}/#{d}.txt")
+       |> String.split("\n", trim: true)}
+    end)
   end
 end
