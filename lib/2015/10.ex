@@ -1,20 +1,20 @@
 defmodule Aoc.Y2015.D10 do
-  def parse(input), do: input
+  def parse(input), do: to_charlist(input)
 
   defp read_aloud(input) do
-    String.graphemes(input)
-    |> Enum.chunk_by(& &1)
-    |> Enum.map(fn g = [h | _] ->
-      (length(g) |> to_string()) <> h
+    Enum.chunk_by(input, & &1)
+    |> Enum.flat_map(fn g = [h | _] ->
+      length(g)
+      |> to_charlist()
+      |> Kernel.++([h])
     end)
-    |> Enum.join()
   end
 
   defp looknsay(input, times) do
     Enum.reduce(1..times, input, fn _, acc ->
       read_aloud(acc)
     end)
-    |> String.length()
+    |> length()
   end
 
   def part1(input), do: looknsay(input, 40)

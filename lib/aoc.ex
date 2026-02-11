@@ -18,6 +18,21 @@ defmodule Aoc do
     end
   end
 
+  def test!(y, d) do
+    [r1, r2] = result!(y, d)
+    [p1, p2] = run!(y, d) |> Enum.map(&to_string/1)
+
+    ("test for #{d}, #{y} " <>
+       if p1 == r1 && p2 == r2 do
+         "Passed"
+       else
+         "Failed" <>
+           "\nexpected part 1: #{r1} | part 2: #{r2}"
+       end <>
+       "\nrecieved part 1: #{p1} | part 2: #{p2}")
+    |> IO.puts()
+  end
+
   def run!(y, d) do
     module = Module.concat(Aoc, :"Y#{y}.D#{d}")
     input = apply(module, :parse, [input!(y, d)])
@@ -123,9 +138,12 @@ defmodule Aoc do
       _ -> false
     end)
     |> Enum.map(fn {d, _} ->
-      {d,
-       File.read!("result/#{y}/#{d}.txt")
-       |> String.split("\n", trim: true)}
+      {d, result!(y, d)}
     end)
+  end
+
+  def result!(y, d) do
+    File.read!("result/#{y}/#{d}.txt")
+    |> String.split("\n", trim: true)
   end
 end
