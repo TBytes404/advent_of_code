@@ -82,15 +82,19 @@ defmodule Aoc do
     File.mkdir_p("lib/#{y}")
     filepath = "lib/#{y}/#{d}.ex"
 
-    File.write!(filepath, """
-    defmodule Aoc.Y#{y}.D#{d} do
-      def parse(input), do: input
-      def part1(input), do: input
-      def part2(input), do: input
-    end
-    """)
+    if File.exists?(filepath) do
+      IO.puts("File already exists at #{filepath}.")
+    else
+      File.write!(filepath, """
+      defmodule Aoc.Y#{y}.D#{d} do
+        def parse(input), do: input\n
+        def part1(input), do: input\n
+        def part2(_), do: nil
+      end
+      """)
 
-    IO.puts("Successfully setup #{filepath}.")
+      IO.puts("Successfully setup #{filepath}.")
+    end
   end
 
   def output!(y, d, rs) do
@@ -110,6 +114,9 @@ defmodule Aoc do
         cookie
     end
   end
+
+  def session_cookie!(cookie),
+    do: System.put_env("AOC_SESSION_COOKIE", cookie)
 
   def ask_yes_no(prompt) do
     case IO.gets(prompt <> " (y/[n]): ")
