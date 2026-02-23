@@ -1,4 +1,9 @@
 defmodule Aoc do
+  def lock!() do
+    [y, d] = current_date!()
+    lock!(y, d)
+  end
+
   @doc """
   Dont use in loops or cocurrencty
   """
@@ -18,6 +23,11 @@ defmodule Aoc do
     end
   end
 
+  def test!() do
+    [y, d] = current_date!()
+    test!(y, d)
+  end
+
   def test!(y, d) do
     [r1, r2] = result!(y, d)
     [p1, p2] = run!(y, d) |> Enum.map(&to_string/1)
@@ -33,12 +43,22 @@ defmodule Aoc do
     |> IO.puts()
   end
 
+  def run!() do
+    [y, d] = current_date!()
+    run!(y, d)
+  end
+
   def run!(y, d) do
     module = Module.concat(Aoc, :"Y#{y}.D#{d}")
     input = apply(module, :parse, [input!(y, d)])
 
     Enum.map(1..2, &Task.async(module, :"part#{&1}", [input]))
     |> Task.await_many(50_000)
+  end
+
+  def input!() do
+    [y, d] = current_date!()
+    input!(y, d)
   end
 
   @doc """
@@ -81,6 +101,7 @@ defmodule Aoc do
   def setup!(y, d) do
     File.mkdir_p("lib/#{y}")
     filepath = "lib/#{y}/#{d}.ex"
+    System.put_env("AOC_CURRENT_DATE", "#{y} #{d}")
 
     if File.exists?(filepath) do
       IO.puts("File already exists at #{filepath}.")
@@ -104,11 +125,21 @@ defmodule Aoc do
     File.write!(filepath, content)
   end
 
+  defp current_date!() do
+    case System.get_env("AOC_CURRENT_DATE") do
+      nil ->
+        raise {:error, "AOC_CURRENT_DATE environment variable not set."}
+
+      cookie ->
+        String.split(cookie)
+    end
+  end
+
   # Private function to securely retrieve the session cookie
   defp session_cookie!() do
     case System.get_env("AOC_SESSION_COOKIE") do
       nil ->
-        raise {:error, "AOC_SESSION_COOKIE environment variable not set. Cannot fetch input."}
+        raise {:error, "AOC_SESSION_COOKIE environment variable not set."}
 
       cookie ->
         cookie
@@ -147,6 +178,11 @@ defmodule Aoc do
     |> Enum.map(fn {d, _} ->
       {d, result!(y, d)}
     end)
+  end
+
+  def result!() do
+    [y, d] = current_date!()
+    result!(y, d)
   end
 
   def result!(y, d) do
