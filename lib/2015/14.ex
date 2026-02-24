@@ -23,6 +23,18 @@ defmodule Aoc.Y2015.D14 do
     {a, {s, d, r}}
   end
 
+  defp count_points(ret) do
+    with {m, _} <- Map.values(ret) |> Enum.max_by(&elem(&1, 0)) do
+      Map.filter(ret, fn {_, {v, _}} -> v == m end)
+    end
+    |> Map.keys()
+    |> Enum.reduce(ret, fn k, ret ->
+      Map.update!(ret, k, fn {v, p} ->
+        {v, p + 1}
+      end)
+    end)
+  end
+
   def part1(input) do
     input
     |> Enum.map(fn {_, {s, d, r}} ->
@@ -50,17 +62,5 @@ defmodule Aoc.Y2015.D14 do
     |> Map.values()
     |> Enum.map(&elem(&1, 1))
     |> Enum.max()
-  end
-
-  defp count_points(ret) do
-    with {m, _} <- Map.values(ret) |> Enum.max_by(&elem(&1, 0)) do
-      Map.filter(ret, fn {_, {v, _}} -> v == m end)
-    end
-    |> Map.keys()
-    |> Enum.reduce(ret, fn k, ret ->
-      Map.update!(ret, k, fn {v, p} ->
-        {v, p + 1}
-      end)
-    end)
   end
 end

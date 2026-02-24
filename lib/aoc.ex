@@ -45,13 +45,14 @@ defmodule Aoc do
     |> IO.puts()
   end
 
-  def run!() do
+  def run!(r \\ true) do
     [y, d] = current_date!()
-    run!(y, d)
+    run!(y, d, r)
   end
 
-  def run!(y, d) do
+  def run!(y, d, r \\ false) do
     module = Module.concat(Aoc, :"Y#{y}.D#{d}")
+    if r && IEx.started?(), do: IEx.Helpers.r(module)
     input = apply(module, :parse, [input!(y, d)])
 
     Enum.map(1..2, &Task.async(module, :"part#{&1}", [input]))
@@ -125,9 +126,17 @@ defmodule Aoc do
     else
       File.write!(filepath, """
       defmodule Aoc.Y#{y}.D#{d} do
-        def parse(input), do: input\n
-        def part1(input), do: input\n
-        def part2(_), do: nil
+        def parse(input) do
+          input
+        end
+
+        def part1(input) do
+          input
+        end
+
+        def part2(_) do
+          nil
+        end
       end
       """)
 

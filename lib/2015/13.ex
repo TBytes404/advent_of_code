@@ -26,11 +26,6 @@ defmodule Aoc.Y2015.D13 do
     end)
   end
 
-  def part1(input) do
-    capture(input)
-    |> do_job
-  end
-
   def do_job(map) do
     Map.keys(map)
     |> permute()
@@ -51,6 +46,11 @@ defmodule Aoc.Y2015.D13 do
 
   defp permute(terms),
     do: for(t <- terms, u <- permute(terms -- [t]), do: [t | u])
+
+  def part1(input) do
+    capture(input)
+    |> do_job
+  end
 
   def part2(input) do
     names =
