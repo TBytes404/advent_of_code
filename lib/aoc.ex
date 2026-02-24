@@ -1,4 +1,6 @@
 defmodule Aoc do
+  @base_url "https://adventofcode.com"
+
   def lock!() do
     [y, d] = current_date!()
     lock!(y, d)
@@ -88,7 +90,7 @@ defmodule Aoc do
     IO.puts("Attempting to fetch challenge #{y}/#{d}...")
 
     if Req.get!(
-         url: "https://adventofcode.com/#{y}/day/#{d}/input",
+         url: "#{@base_url}/#{y}/day/#{d}/input",
          headers: %{"Cookie" => "session=#{cookie};"},
          into: File.stream!(filepath)
        ).status != 200 do
@@ -96,6 +98,21 @@ defmodule Aoc do
     end
 
     IO.puts("Successfully saved to #{filepath}.")
+  end
+
+  def quest!() do
+    [y, d] = current_date!()
+    quest!(y, d)
+  end
+
+  def quest!(y, d) do
+    url = @base_url <> "/#{y}/day/#{d}"
+
+    case :os.type() do
+      {:unix, :darwin} -> System.cmd("open", [url])
+      {:unix, _} -> System.cmd("xdg-open", [url])
+      {:win32, _} -> System.cmd("cmd.exe", ["/c", "start", url])
+    end
   end
 
   def setup!(y, d) do
