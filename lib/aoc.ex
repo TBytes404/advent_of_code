@@ -45,14 +45,14 @@ defmodule Aoc do
     |> IO.puts()
   end
 
-  def run!(r \\ true) do
+  def run!() do
     [y, d] = current_date!()
-    run!(y, d, r)
+    run!(y, d)
   end
 
-  def run!(y, d, r \\ false) do
+  def run!(y, d) do
     module = Module.concat(Aoc, :"Y#{y}.D#{d}")
-    if r && IEx.started?(), do: IEx.Helpers.r(module)
+    if IEx.started?(), do: IEx.Helpers.r(module)
     input = apply(module, :parse, [input!(y, d)])
 
     Enum.map(1..2, &Task.async(module, :"part#{&1}", [input]))
@@ -140,6 +140,7 @@ defmodule Aoc do
       end
       """)
 
+      if IEx.started?(), do: IEx.Helpers.recompile()
       IO.puts("Successfully setup #{filepath}.")
     end
   end
